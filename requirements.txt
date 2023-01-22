@@ -1,0 +1,15 @@
+GitPython
+gunicorn
+numpy
+packaging
+pandas
+scikit-learn
+scipy
+streamlit
+tensorboard-data-server
+tensorboard-plugin-wit
+tensorflow-estimator
+tensorflow-io-gcs-filesystem
+tensorflow
+keras
+
