@@ -28,6 +28,7 @@ page_bg_img = """
 }
 </style>
 """
+st.set_option('deprecation.showfileUploaderEncoding', False)
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
