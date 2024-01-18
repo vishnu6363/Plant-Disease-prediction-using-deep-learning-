@@ -7,6 +7,7 @@ Created on Mon Jan 9 22:09:42 2023
 
 import streamlit as st
 import tensorflow as tf
+from tensorflow.keras.preprocessing import image
 import numpy as np
 from PIL import Image
  
