@@ -33,7 +33,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('./convolutional.h5')
+    model = tf.keras.models.load_model('./mongomodel.h5')
     return model
 
 def preprocess_image(image):
@@ -71,7 +71,7 @@ else:
     class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
                    'Powdery Mildew', 'Sooty Mould']
 
-    result = class_names[np.argmax(pred,axis=1)]
+    result = class_names[np.argmax(pred)]
 
     output = 'The Disease is ' + result
 
