@@ -60,7 +60,7 @@ def main():
         test_image = Image.open(file)
         st.image(test_image, caption="Input Image")
 
-        pred = predict_class(np.asarray(test_image), model)
+        pred = predict_class(test_image, model)
 
         class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
                        'Powdery Mildew', 'Sooty Mould']
