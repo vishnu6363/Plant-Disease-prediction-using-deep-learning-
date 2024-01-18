@@ -33,7 +33,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('./convolutional_2D (1).h5')
+    model = tf.keras.models.load_model('convolutional.h5')
     return model
 
 def predict_class(input_image, model):
