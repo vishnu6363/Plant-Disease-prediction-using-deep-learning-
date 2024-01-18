@@ -33,7 +33,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('./mongomodel.h5')
+    model = tf.keras.models.load_model('./mangomodel.h5')
     return model
 
 def preprocess_image(image):
