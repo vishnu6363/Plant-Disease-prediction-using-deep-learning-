@@ -33,12 +33,17 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('convolutional.h5')
+    model = tf.keras.models.load_model('./convolutional.h5')
     return model
 
-def predict_class(image, model):
+def preprocess_image(image):
     image = tf.cast(image, tf.float32)
+    image = tf.image.resize(image, (128, 128))
+    image = image / 255.0  # Normalize pixel values to the range [0, 1]
     image = np.expand_dims(image, axis=0)
+    return image
+
+def predict_class(image, model):
     prediction = model.predict(image)
     return prediction
 
@@ -56,12 +61,12 @@ else:
 
     # Load and preprocess the image
     test_image = Image.open(file).convert("RGB")
-    test_image = test_image.resize((128, 128))  # Resize to match the model's input size
-    test_image_array = np.array(test_image) / 255.0  # Normalize pixel values to the range [0, 1]
+    test_image_array = np.array(test_image)
+    processed_image = preprocess_image(test_image_array)
 
     st.image(test_image, caption="Input Image", width=200)
 
-    pred = predict_class(test_image_array, model)
+    pred = predict_class(processed_image, model)
 
     class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
                    'Powdery Mildew', 'Sooty Mould']
