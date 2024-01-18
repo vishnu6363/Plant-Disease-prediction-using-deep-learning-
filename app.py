@@ -38,8 +38,8 @@ def load_model():
     return model
 
 def predict_class(input_image, model):
- # img = image.load_img(image_path)
-  img = image.img_to_array(input_image)
+  img = image.load_img(image_path)
+  img = image.img_to_array(img)
   img = tf.image.resize(img, (128, 128)) 
   direct_image = np.expand_dims(img, axis=0) 
   prediction = model.predict(direct_image) 
@@ -58,7 +58,7 @@ def main():
         slot.text('Running inference....')
 
         test_image = Image.open(file)
-        st.image(test_image, caption="Input Image")
+        st.image(file, caption="Input Image")
 
         pred = predict_class(test_image, model)
 
