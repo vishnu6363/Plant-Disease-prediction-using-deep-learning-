@@ -71,7 +71,7 @@ else:
     class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
                    'Powdery Mildew', 'Sooty Mould']
 
-    result = class_names[np.argmax(pred)]
+    result = class_names[np.argmax(pred,axis=1)]
 
     output = 'The Disease is ' + result
 
