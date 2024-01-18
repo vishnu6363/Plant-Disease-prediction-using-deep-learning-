@@ -38,7 +38,7 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-	model = tf.keras.models.load_model('./CNN(1).h5')
+	model = tf.keras.models.load_model('./convolutional_2D (1).h5')
 	return model
 
 
