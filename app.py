@@ -9,6 +9,7 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import cv2
  
 page_bg_img = """
 <style>
@@ -37,11 +38,11 @@ def load_model():
     return model
 
 def predict_class(input_image, model):
-   
-   img_array = image.img_to_array(img)
-   img_array = np.expand_dims(img_array, axis=0)
-   img_array /= 255.0 
-   prediction = model.predict(img_array)
+   direct_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB) 
+   target_size = (128, 128) 
+   direct_image = cv2.resize(direct_image, target_size) 
+   img = np.expand_dims(direct_image, axis=0) 
+   prediction = model.predict(img) 
    return prediction
 
 def main():
