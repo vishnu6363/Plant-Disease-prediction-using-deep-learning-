@@ -37,7 +37,7 @@ def load_model():
     return model
 
 def predict_class(input_image, model):
-   img = image.load_img(image_path, target_size=(128, 128))
+   
    img_array = image.img_to_array(img)
    img_array = np.expand_dims(img_array, axis=0)
    img_array /= 255.0 
