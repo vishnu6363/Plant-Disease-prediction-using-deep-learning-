@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jan  9 22:09:42 2023
-
+Created on Mon Jan 9 22:09:42 2023
 @author: vishn
 """
 
@@ -9,10 +8,6 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-
-#import image
-from tensorflow.keras.preprocessing import image
-#import opencv
 
 page_bg_img = f"""
 <style>
@@ -38,19 +33,14 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-	model = tf.keras.models.load_model('./convolutional.h5')
-	return model
-
+    model = tf.keras.models.load_model('./convolutional.h5')
+    return model
 
 def predict_class(image, model):
-    
     image = tf.cast(image, tf.float32)
-    #image = image.img_to_array(image)
-   # image=cv2.imread(image)
-    image = np.expand_dims(image, axis = 0)
+    image = np.expand_dims(image, axis=0)
     prediction = model.predict(image)
     return prediction
-
 
 model = load_model()
 st.title('Mongo Plant Disease Prediction')
@@ -58,34 +48,28 @@ st.title('Mongo Plant Disease Prediction')
 file = st.file_uploader("Upload an image of a Mongo Leaf")
 
 if file is None:
-	st.text('Waiting for upload....')
+    st.text('Waiting for upload....')
 
 else:
-	slot = st.empty()
-	slot.text('Running inference....')
+    slot = st.empty()
+    slot.text('Running inference....')
 
-	test_image = tf.keras.preprocessing.image.load_img(file,target_size=(128,128))
-    
-    
-    
+    # Load and preprocess the image
+    test_image = Image.open(file).convert("RGB")
+    test_image = test_image.resize((128, 128))  # Resize to match the model's input size
+    test_image_array = np.array(test_image) / 255.0  # Normalize pixel values to the range [0, 1]
 
-	st.image(test_image, caption="Input Image", width = 200)
+    st.image(test_image, caption="Input Image", width=200)
 
-	pred = predict_class(np.asarray(test_image), model)
+    pred = predict_class(test_image_array, model)
 
-	class_names =['Anthracnose',
- 'Bacterial Canker',
- 'Cutting Weevil',
- 'Die Back',
- 'Gall Midge',
- 'Healthy',
- 'Powdery Mildew',
- 'Sooty Mould']
+    class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
+                   'Powdery Mildew', 'Sooty Mould']
 
-	result = class_names[np.argmax(pred)]
+    result = class_names[np.argmax(pred)]
 
-	output = 'The Disease is ' + result
+    output = 'The Disease is ' + result
 
-	slot.text('Done')
+    slot.text('Done')
 
-	st.success(output)
+    st.success(output)
