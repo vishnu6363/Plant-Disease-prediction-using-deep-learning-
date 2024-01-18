@@ -39,12 +39,13 @@ def load_model():
     return model
 
 def predict_class(input_image, model):
-  img = image.load_img(input_image)
-  img = image.img_to_array(img)
-  img = tf.image.resize(img, (128, 128)) 
-  direct_image = np.expand_dims(img, axis=0) 
-  prediction = model.predict(direct_image) 
-  return prediction
+    img = image.load_img(input_image)
+    img = image.img_to_array(img)
+    img = img.resize((128, 128))  # Use PIL for resizing
+    direct_image = np.expand_dims(img, axis=0)
+    prediction = model.predict(direct_image)
+    return prediction
+
 
 def main():
     model = load_model()
