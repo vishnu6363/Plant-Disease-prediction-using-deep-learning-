@@ -29,17 +29,19 @@ right: 2rem;
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
- 
-
 @st.cache(allow_output_mutation=True)
 def load_model():
     model = tf.keras.models.load_model('./mangomodel.h5')
     return model
 
 def preprocess_image(image):
-    image = tf.cast(image, tf.float32)
+    # Convert image to NumPy array
+    image = np.array(image)
+    # Resize image
     image = tf.image.resize(image, (128, 128))
-    image = image / 255.0  # Normalize pixel values to the range [0, 1]
+    # Normalize pixel values
+    image = image / 255.0
+    # Expand dimensions for model input
     image = np.expand_dims(image, axis=0)
     return image
 
@@ -50,19 +52,17 @@ def predict_class(image, model):
 model = load_model()
 st.title('Mongo Plant Disease Prediction')
 
-file = st.file_uploader("Upload an image of a Mongo Leaf")
+file = st.file_uploader("Upload an image of a Mango Leaf")
 
 if file is None:
     st.text('Waiting for upload....')
-
 else:
     slot = st.empty()
     slot.text('Running inference....')
 
     # Load and preprocess the image
     test_image = Image.open(file).convert("RGB")
-    test_image_array = np.array(test_image)
-    processed_image = preprocess_image(test_image_array)
+    processed_image = preprocess_image(test_image)
 
     st.image(test_image, caption="Input Image", width=150)
 
@@ -71,7 +71,10 @@ else:
     class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
                    'Powdery Mildew', 'Sooty Mould']
 
-    result = class_names[np.argmax(pred)]
+    # Get the class index with the highest probability
+    predicted_class_index = np.argmax(pred)
+    # Get the corresponding class name
+    result = class_names[predicted_class_index]
 
     output = 'The Disease is ' + result
 
