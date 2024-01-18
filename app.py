@@ -64,7 +64,7 @@ else:
     test_image_array = np.array(test_image)
     processed_image = preprocess_image(test_image_array)
 
-    st.image(test_image, caption="Input Image", width=200)
+    st.image(test_image, caption="Input Image", width=150,height=150)
 
     pred = predict_class(processed_image, model)
 
