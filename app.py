@@ -67,6 +67,7 @@ else:
     st.image(test_image, caption="Input Image", width=150)
 
     pred = predict_class(processed_image, model)
+    print(pred)
 
     class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
                    'Powdery Mildew', 'Sooty Mould']
