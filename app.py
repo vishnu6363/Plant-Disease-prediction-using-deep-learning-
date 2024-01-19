@@ -8,6 +8,7 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import cv2
 
 page_bg_img = f"""
 <style>
@@ -35,15 +36,11 @@ def load_model():
     return model
 
 def preprocess_image(image):
-    # Convert image to NumPy array
-    image = np.array(image)
-    # Resize image
-    image = tf.image.resize(image, (128, 128))
-    # Normalize pixel values
-    image = image / 255.0
-    # Expand dimensions for model input
-    image = np.expand_dims(image, axis=0)
-    return image
+   direct_image = cv2.cvtColor(direct_image, cv2.COLOR_BGR2RGB) 
+   target_size = (128, 128) 
+   direct_image = cv2.resize(direct_image, target_size) 
+   img = np.expand_dims(direct_image, axis=0) 
+   return img
 
 def predict_class(image, model):
     prediction = model.predict(image)
@@ -61,7 +58,7 @@ else:
     slot.text('Running inference....')
 
     # Load and preprocess the image
-    test_image = Image.open(file).convert("RGB")
+    test_image = cv2.imread(file)
     processed_image = preprocess_image(test_image)
 
     st.image(test_image, caption="Input Image", width=150)
@@ -73,7 +70,7 @@ else:
                    'Powdery Mildew', 'Sooty Mould']
 
     # Get the class index with the highest probability
-    predicted_class_index = np.argmax(pred)
+    predicted_class_index = np.argmax(pred, axis=1)
     # Get the corresponding class name
     result = class_names[predicted_class_index]
 
