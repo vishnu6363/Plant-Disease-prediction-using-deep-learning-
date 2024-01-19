@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
+# -- coding: utf-8 --
 """
-Created on Mon Jan  9 22:09:42 2023
-
+Created on Mon Jan 9 22:09:42 2023
 @author: vishn
 """
 
@@ -9,10 +8,6 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-
-#import image
-from tensorflow.keras.preprocessing import image
-#import opencv
 
 page_bg_img = f"""
 <style>
@@ -34,16 +29,23 @@ right: 2rem;
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-st.set_option('deprecation.showfileUploaderEncoding', False)
-
 @st.cache(allow_output_mutation=True)
 def load_model():
-	model = tf.keras.models.load_model('convolutional.h5')
-	return model
+    model = tf.keras.models.load_model('./mangomodel.h5')
+    return model
 
+def preprocess_image(image):
+    # Convert image to NumPy array
+    image = np.array(image)
+    # Resize image
+    image = tf.image.resize(image, (128, 128))
+    # Normalize pixel values
+    image = image / 255.0
+    # Expand dimensions for model input
+    image = np.expand_dims(image, axis=0)
+    return image
 
 def predict_class(image, model):
-    
     image = tf.cast(image, tf.float32)
     #image = image.img_to_array(image)
    # image=cv2.imread(image)
@@ -51,41 +53,36 @@ def predict_class(image, model):
     prediction = model.predict(image)
     return prediction
 
-
 model = load_model()
-st.title('Plant Disease Prediction')
+st.title('Mongo Plant Disease Prediction')
 
-file = st.file_uploader("Upload an image of a flower")
+file = st.file_uploader("Upload an image of a Mango Leaf")
 
 if file is None:
-	st.text('Waiting for upload....')
-
+    st.text('Waiting for upload....')
 else:
-	slot = st.empty()
-	slot.text('Running inference....')
+    slot = st.empty()
+    slot.text('Running inference....')
 
-	test_image = tf.keras.preprocessing.image.load_img(file,target_size=(128,128))
-    
-    
-    
+    # Load and preprocess the image
+    test_image =  tf.keras.preprocessing.image.load_img(file,target_size=(128,128))
+     
 
-	st.image(test_image, caption="Input Image", width = 200)
+    st.image(test_image, caption="Input Image", width=150)
 
-	pred = predict_class(np.asarray(test_image), model)
+    pred = predict_class(test_image, model)
+    print(pred)
 
-	class_names =['Anthracnose',
- 'Bacterial Canker',
- 'Cutting Weevil',
- 'Die Back',
- 'Gall Midge',
- 'Healthy',
- 'Powdery Mildew',
- 'Sooty Mould']
+    class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy',
+                   'Powdery Mildew', 'Sooty Mould']
 
-	result = class_names[np.argmax(pred)]
+    # Get the class index with the highest probability
+    predicted_class_index = np.argmax(pred)
+    # Get the corresponding class name
+    result = class_names[predicted_class_index]
 
-	output = 'The Disease is ' + result
+    output = 'The Disease is ' + result
 
-	slot.text('Done')
+    slot.text('Done')
 
-	st.success(output)
+    st.success(output)
