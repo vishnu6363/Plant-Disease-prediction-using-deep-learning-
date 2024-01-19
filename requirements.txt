@@ -1,5 +1,4 @@
-opencv-python-headless
-PIL
+opencv-python-headless 
 GitPython
 gunicorn
 numpy
